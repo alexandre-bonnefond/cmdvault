@@ -95,6 +95,25 @@ tar czf <path_to_target_tar_gz> <path_to_file1_path_to_file2>
 # Extract into a directory
 tar -x <path_to_directory> <path_to_directory>" "$(tldr_to_cheat tar <<<"$TLDR_PAGE")"
 
+# the fixture page as the cached one, and its second example saved in the vault
+TLDR_CACHE="$TMP/tldr"
+mkdir -p "$TLDR_CACHE/linux"
+printf '%s\n' "$TLDR_PAGE" >"$TLDR_CACHE/linux/tar.md"
+cmd_save -d "Extract here" -t "tar" -- 'tar -x <path_to_directory> <path_to_directory>' 2>/dev/null
+mkdir "$TMP/tldrdir"
+tldr_cheat tar "$TMP/tldrdir"
+check "tldr examples leave out the saved ones" "% tldr, tar
+
+# Create a gzipped archive
+tar czf <path_to_target_tar_gz> <path_to_file1_path_to_file2>" "$(cat "$TMP/tldrdir/tldr.cheat")"
+check "picked from tldr" "tar czf <path_to_target_tar_gz> <path_to_file1_path_to_file2>" \
+  "$(picked_template 'tar czf a.tgz x y' "$TMP/tldrdir")"
+check "not picked from tldr" "" "$(picked_template 'tar xf a.tgz' "$TMP/tldrdir")"
+check "picked from the vault, a recipe" $'docker compose build && \\\x1fdocker compose up -d' \
+  "$(picked_template $'docker compose build && \\\ndocker compose up -d' "$CHEATS_DIR")"
+mkdir -p "$TLDR_CACHE/missing" && touch "$TLDR_CACHE/missing/nosuchcmd"
+check "a missing page is not fetched again" "1" "$(tldr_page nosuchcmd >/dev/null; echo $?)"
+
 # --- navi reads what we write
 
 if command -v navi >/dev/null; then

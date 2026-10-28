@@ -37,8 +37,9 @@ and a launcher for `~/.local/bin/cmdvault rofi` (linux-setup: the cheatsheet, Su
 | bash | Ctrl+X s | save the line being typed, it stays on the prompt |
 | bash | Ctrl+G | search the vault, the typed line is the query, the filled command replaces it (not run) |
 | bash | `cv [QUERY]` | search the vault, the result lands on the next prompt |
-| bash | `cv --tldr CMD` | same with the tldr page of CMD, its `{{args}}` become placeholders |
-| bash | `cv --cheatsh QUERY` | same with cheat.sh |
+| bash | `cv tar`, `tar` Ctrl+G | a query that is a command name also lists its tldr examples, after your entries; picking one offers to save it |
+| bash | `cv --tldr CMD` | only the tldr page of CMD, its `{{args}}` become placeholders |
+| bash | `cv --cheatsh QUERY` | only cheat.sh (online, community cheat sheets, `QUERY` is a command or `lang/topic`) |
 | bash | `rec NAME` | record with asciinema, then save the typed commands as an entry or link an entry |
 | tmux | prefix + ? | the vault in a popup, the result is pasted into the pane (not run) |
 | rofi | `cmdvault rofi` | Enter asks for the placeholders and copies the command, Ctrl+P plays the recording |
@@ -80,7 +81,8 @@ the replay window from rofi (default urxvt).
 ## Notes
 
 - Ubuntu's `tldr` (Haskell client 0.9.2) can no longer update its cache, so `cv --tldr` downloads the
-  pages from tldr-pages into `~/.cache/cmdvault/tldr` (refreshed after 30 days).
+  pages from tldr-pages into `~/.cache/cmdvault/tldr` (refreshed after 30 days, a command without a page
+  is not asked for again for 30 days). Examples already saved in the vault are not listed twice.
 - `cv` types C-x C-g into its own tmux pane to put the result on the next prompt; outside tmux it adds
   it to the history instead (press Up).
 - Commands typed in `rec` are read from the history file, so commands starting with a space

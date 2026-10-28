@@ -18,8 +18,9 @@ Usage: cmdvault COMMAND [ARGS]
 
   save [-d DESC] [-t TAGS] [-r REC] -- CMD...   save a command (several CMDs = one recipe)
   find [QUERY]                 pick a vault entry with navi, print the filled command
-  find --tldr CMD              same with the tldr page of CMD
-  find --cheatsh QUERY         same with cheat.sh
+                               (a QUERY that is a command name adds its tldr examples)
+  find --tldr CMD              only the tldr page of CMD
+  find --cheatsh QUERY         only cheat.sh
   popup [PANE]                 tmux popup: pick, then paste into PANE (not run)
   rofi                         rofi menu, copies the filled command to the clipboard
   rec NAME                     record a terminal session, then link it to an entry

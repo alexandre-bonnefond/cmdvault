@@ -3,8 +3,9 @@
 #   save N          pick some of the last N commands, saved as one recipe
 #   save 'CMD'      save CMD
 #   Ctrl+X s        save the line being typed (it stays on the prompt)
-#   Ctrl+G          search the vault (the typed line is the query), the result replaces the line
-#   cv [QUERY]      search the vault, cv --tldr CMD and cv --cheatsh QUERY search tldr and cheat.sh,
+#   Ctrl+G          search the vault (the typed line is the query), the result replaces the line,
+#                   a query that is a command name (tar) also lists its tldr examples
+#   cv [QUERY]      same, cv --tldr CMD and cv --cheatsh QUERY search only tldr or cheat.sh,
 #                   the result lands on the next prompt (in tmux) or in the history (press Up)
 #   rec NAME        record a terminal session with asciinema, then save or link it
 
@@ -58,9 +59,10 @@ _cmdvault_save_line() {
 
 bind -x '"\C-xs": _cmdvault_save_line'
 
+# cooked, picking a tldr example offers to save it
 _cmdvault_search_line() {
   local OUT
-  OUT=$(_cmdvault find -- "$READLINE_LINE") && [ -n "$OUT" ] || return
+  OUT=$(_cmdvault_cooked _cmdvault find -- "$READLINE_LINE") && [ -n "$OUT" ] || return
   READLINE_LINE=$OUT
   READLINE_POINT=${#READLINE_LINE}
 }

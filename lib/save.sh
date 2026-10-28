@@ -35,14 +35,17 @@ edit_in_editor() {
   rm -f "$TMP"
 }
 
-# cmd_save [-d DESCRIPTION] [-t TAGS] [-r RECORDING] [--] CMD...
-# asks for what is not given, -d and -t together make it non-interactive
+# cmd_save [-d DESCRIPTION] [-t TAGS] [-D DESCRIPTION] [-T TAGS] [-r RECORDING] [--] CMD...
+# asks for what is not given, -d and -t together make it non-interactive,
+# -D and -T only prefill the prompts
 cmd_save() {
-  local DESCRIPTION="" TAGS="" REC="" INTERACTIVE=1
+  local DESCRIPTION="" TAGS="" REC="" INTERACTIVE=1 DEFAULT_DESCRIPTION="" DEFAULT_TAGS=""
   while [ $# -gt 0 ]; do
     case $1 in
       -d) DESCRIPTION=$2 && shift ;;
       -t) TAGS=$2 && shift ;;
+      -D) DEFAULT_DESCRIPTION=$2 && shift ;;
+      -T) DEFAULT_TAGS=$2 && shift ;;
       -r) REC=$2 && shift ;;
       --) shift && break ;;
       -*) die "save: unknown option $1" ;;
@@ -85,7 +88,7 @@ cmd_save() {
   fi
 
   while [ -z "$DESCRIPTION" ]; do
-    DESCRIPTION=$(ask "Description: ") || die "aborted"
+    DESCRIPTION=$(ask "Description: " "$DEFAULT_DESCRIPTION") || die "aborted"
   done
   DESCRIPTION=$(printf '%s' "$DESCRIPTION" | tr '\n' ' ')
 
@@ -93,7 +96,7 @@ cmd_save() {
     local KNOWN
     KNOWN=$(cheat_tags)
     [ -n "$KNOWN" ] && printf '\e[2mTags in use: %s\e[0m\n' "$KNOWN" >/dev/tty
-    TAGS=$(ask "Tags (comma separated, the first one picks the file): ") || die "aborted"
+    TAGS=$(ask "Tags (comma separated, the first one picks the file): " "$DEFAULT_TAGS") || die "aborted"
   fi
   TAGS=$(printf '%s' "$TAGS" | tr ',' '\n' | sed 's/^[[:space:]]*//; s/[[:space:]]*$//' | grep -v '^$' | paste -sd, | sed 's/,/, /g')
   [ -n "$TAGS" ] || TAGS=misc
