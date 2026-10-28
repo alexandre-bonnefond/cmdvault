@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+# cmdvault: save and recall commands and recipes, stored as navi .cheat files in
+# $CMDVAULT_DATA (a separate git repo). See README.md.
+
+set -o pipefail
+
+CMDVAULT_ROOT="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/.." && pwd)"
+
+for LIB in "$CMDVAULT_ROOT"/lib/*.sh; do
+  # shellcheck source=/dev/null
+  source "$LIB"
+done
+
+usage() {
+  cat <<EOF
+Usage: cmdvault COMMAND [ARGS]
+
+  save [-d DESC] [-t TAGS] [-r REC] -- CMD...   save a command (several CMDs = one recipe)
+  find [QUERY]                 pick a vault entry with navi, print the filled command
+  find --tldr CMD              same with the tldr page of CMD
+  find --cheatsh QUERY         same with cheat.sh
+  popup PANE                   tmux popup: pick, then paste into PANE (not run)
+  rofi                         rofi menu, copies the filled command to the clipboard
+  rec NAME                     record a terminal session, then link it to an entry
+  play [NAME] [ARGS]           replay a recording (asciinema play ARGS)
+  gif NAME [ARGS]              export a recording to a GIF with agg (agg ARGS)
+  ls                           list the entries
+  edit                         open a cheat file in \$EDITOR
+  sync                         git pull --rebase and push the cheats repo
+
+Cheats repo: $CMDVAULT_DATA
+In bash: save, save N, rec NAME, cv [--tldr|--cheatsh] [QUERY], Ctrl+G, Ctrl+X s
+EOF
+}
+
+case "${1:-}" in
+  save | find | popup | rofi | rec | play | gif | ls | edit | sync)
+    COMMAND=$1
+    shift
+    "cmd_$COMMAND" "$@"
+    ;;
+  "" | -h | --help | help) usage ;;
+  *) die "unknown command '$1' (see cmdvault --help)" ;;
+esac

@@ -1,0 +1,21 @@
+# navi config used by cmdvault (exported as NAVI_CONFIG by lib/common.sh),
+# the cheats path is passed with --path so ~/.config/navi is never read.
+
+style:
+  tag:
+    color: cyan
+    width_percentage: 20
+    min_width: 15
+  comment:
+    color: blue
+    width_percentage: 40
+    min_width: 40
+  snippet:
+    color: white
+
+finder:
+  command: fzf
+  overrides: --height 80% --layout reverse --border none
+
+shell:
+  command: bash

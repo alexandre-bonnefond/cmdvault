@@ -1,0 +1,13 @@
+% example, cmdvault
+# Show the disk usage of a directory, biggest first
+; added: 2026-10-28
+du -h --max-depth=1 <dir> | sort -rh | head -n <count>
+$ dir: printf '%s\n' . ~ /var/log
+$ count: printf '%s\n' 10 20 50
+
+% example, git
+# Recipe: commit everything and push the current branch
+; added: 2026-10-28
+git add -A && \
+git commit -m "<message>" && \
+git push
