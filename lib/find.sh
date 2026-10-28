@@ -83,9 +83,10 @@ cmd_find() {
   esac
 }
 
-# cmd_popup PANE: pick in a tmux popup, paste the result into PANE (bracketed, so it is not run)
+# cmd_popup [PANE]: pick in a tmux popup, paste the result into PANE (bracketed, so it is not run),
+# by default the pane the popup was opened from (@cmdvault-pane, set by tmux/cmdvault.tmux)
 cmd_popup() {
-  local PANE=$1 OUT
+  local PANE=${1:-$(tmux show-option -gqv @cmdvault-pane)} OUT
   [ -n "$PANE" ] || die "usage: cmdvault popup PANE"
   OUT=$(cmd_find) && [ -n "$OUT" ] || exit 0
   tmux set-buffer -b cmdvault -- "$OUT"

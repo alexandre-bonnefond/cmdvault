@@ -20,7 +20,7 @@ Usage: cmdvault COMMAND [ARGS]
   find [QUERY]                 pick a vault entry with navi, print the filled command
   find --tldr CMD              same with the tldr page of CMD
   find --cheatsh QUERY         same with cheat.sh
-  popup PANE                   tmux popup: pick, then paste into PANE (not run)
+  popup [PANE]                 tmux popup: pick, then paste into PANE (not run)
   rofi                         rofi menu, copies the filled command to the clipboard
   rec NAME                     record a terminal session, then link it to an entry
   play [NAME] [ARGS]           replay a recording (asciinema play ARGS)

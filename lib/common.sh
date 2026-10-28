@@ -44,9 +44,15 @@ ask() {
   printf '%s' "$REPLY"
 }
 
-# pango-escape a string for rofi -markup-rows
+# pango-escape a string for rofi -markup-rows (quoted replacements, & means the match in bash 5.2)
 escape() {
-  local S="${1//&/&amp;}"
-  S="${S//</&lt;}"
-  printf '%s' "${S//>/&gt;}"
+  local S="${1//&/"&amp;"}"
+  S="${S//</"&lt;"}"
+  printf '%s' "${S//>/"&gt;"}"
+}
+
+# read_entry LINE: split a cheat_parse line into FILE LINE TAGS DESCRIPTION REC COMMAND
+# (with IFS=tab, read would merge the empty fields)
+read_entry() {
+  IFS=$'\x1e' read -r FILE LINE TAGS DESCRIPTION REC COMMAND <<<"${1//$'\t'/$'\x1e'}"
 }

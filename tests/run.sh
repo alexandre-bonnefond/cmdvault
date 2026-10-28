@@ -70,6 +70,10 @@ else
   check "reject lines navi reads as metadata" "" ""
 fi
 
+read_entry "$(cheat_parse | awk -F'\t' '$2 == 2')"
+check "read an entry with an empty recording" "docker, logs|Follow the logs||docker logs -f <container>" "$TAGS|$DESCRIPTION|$REC|$COMMAND"
+check "pango escape" "a &amp;&amp; b &lt;x&gt;" "$(escape 'a && b <x>')"
+
 # --- tldr pages
 
 TLDR_PAGE='# tar
