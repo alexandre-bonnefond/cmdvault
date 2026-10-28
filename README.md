@@ -4,6 +4,9 @@ Save important commands and multi-command recipes once and get them back from ba
 Entries are plain [navi](https://github.com/denisidoro/navi) `.cheat` files with descriptions, tags
 and `<placeholders>`, kept in their own git repo. Terminal recordings (asciinema) can be linked to them.
 
+New to it? Open `docs/quick-start.html` in a browser: short recordings of every workflow
+(also playable in a terminal, e.g. `asciinema play docs/demos/01-save.cast`).
+
 ## Install
 
 ```bash
