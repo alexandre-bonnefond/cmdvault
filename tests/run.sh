@@ -70,6 +70,27 @@ else
   check "reject lines navi reads as metadata" "" ""
 fi
 
+# --- tldr pages
+
+TLDR_PAGE='# tar
+
+> Archiving utility.
+
+- [c]reate a g[z]ipped archive:
+
+`tar czf {{path/to/target.tar.gz}} {{path/to/file1 path/to/file2 ...}}`
+
+- E[x]tract into a `directory`:
+
+`tar {{[-x|--extract]}} {{path/to/directory}} {{path/to/directory}}`'
+check "tldr page to cheat" "% tldr, tar
+
+# Create a gzipped archive
+tar czf <path_to_target_tar_gz> <path_to_file1_path_to_file2>
+
+# Extract into a directory
+tar -x <path_to_directory> <path_to_directory>" "$(tldr_to_cheat tar <<<"$TLDR_PAGE")"
+
 # --- navi reads what we write
 
 if command -v navi >/dev/null; then

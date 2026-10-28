@@ -3,6 +3,9 @@
 #   save N          pick some of the last N commands, saved as one recipe
 #   save 'CMD'      save CMD
 #   Ctrl+X s        save the line being typed (it stays on the prompt)
+#   Ctrl+G          search the vault (the typed line is the query), the result replaces the line
+#   cv [QUERY]      search the vault, cv --tldr CMD and cv --cheatsh QUERY search tldr and cheat.sh,
+#                   the result lands on the next prompt (in tmux) or in the history (press Up)
 
 [[ $- == *i* ]] || return 0
 
@@ -53,3 +56,35 @@ _cmdvault_save_line() {
 }
 
 bind -x '"\C-xs": _cmdvault_save_line'
+
+_cmdvault_search_line() {
+  local OUT
+  OUT=$(_cmdvault find -- "$READLINE_LINE") && [ -n "$OUT" ] || return
+  READLINE_LINE=$OUT
+  READLINE_POINT=${#READLINE_LINE}
+}
+
+bind -x '"\C-g": _cmdvault_search_line'
+
+# cv puts its result on the next prompt by typing C-x C-g into its own pane, the binding
+# inserts _CMDVAULT_PENDING (pasting would run a multi-line recipe, bash only turns
+# bracketed paste on once the prompt is shown)
+cv() {
+  local OUT
+  OUT=$(_cmdvault find "$@") && [ -n "$OUT" ] || return
+  if [ -n "$TMUX" ]; then
+    _CMDVAULT_PENDING=$OUT
+    tmux send-keys -t "$TMUX_PANE" C-x C-g
+  else
+    history -s -- "$OUT"
+    echo "cv: press Up to get it on the prompt" >&2
+  fi
+}
+
+_cmdvault_insert_pending() {
+  READLINE_LINE=${READLINE_LINE:0:READLINE_POINT}$_CMDVAULT_PENDING${READLINE_LINE:READLINE_POINT}
+  READLINE_POINT=$((READLINE_POINT + ${#_CMDVAULT_PENDING}))
+  _CMDVAULT_PENDING=
+}
+
+bind -x '"\C-x\C-g": _cmdvault_insert_pending'
