@@ -6,6 +6,7 @@
 #   Ctrl+G          search the vault (the typed line is the query), the result replaces the line
 #   cv [QUERY]      search the vault, cv --tldr CMD and cv --cheatsh QUERY search tldr and cheat.sh,
 #                   the result lands on the next prompt (in tmux) or in the history (press Up)
+#   rec NAME        record a terminal session with asciinema, then save or link it
 
 [[ $- == *i* ]] || return 0
 
@@ -88,3 +89,10 @@ _cmdvault_insert_pending() {
 }
 
 bind -x '"\C-x\C-g": _cmdvault_insert_pending'
+
+# rec NAME: record with asciinema, then save or link it (the history file gives the typed commands)
+rec() {
+  history -a
+  HISTFILE=$HISTFILE _cmdvault rec "$@"
+  history -n
+}
