@@ -9,6 +9,11 @@ ROFI_THEME="$HOME/git/linux-setup/appconfig/i3/rofi/menu-list.rasi"
 # navi reads our config instead of ~/.config/navi
 export NAVI_CONFIG="$CMDVAULT_ROOT/config/navi.yaml"
 
+# fzf colours readable on light and dark terminals: the terminal's own 16 colours, and the current
+# line in reverse video (fzf's default dark grey hides the text on a light background),
+# the user's FZF_DEFAULT_OPTS come after, so their colours win (same in shell/cmdvault.bash)
+export FZF_DEFAULT_OPTS="--color=16,bg+:-1,fg+:-1:reverse:bold,gutter:-1${FZF_DEFAULT_OPTS:+ $FZF_DEFAULT_OPTS}"
+
 die() {
   echo "cmdvault: $*" >&2
   exit 1

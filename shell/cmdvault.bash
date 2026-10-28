@@ -30,8 +30,9 @@ save() {
   elif [ $# -eq 1 ] && [[ $1 =~ ^[0-9]+$ ]]; then
     # newest first, all selected, saved back in the order they were run
     mapfile -t PICKED < <(_cmdvault_history "$1" | awk '{ print NR "\t" $0 }' | tac |
-      fzf --multi --height 40% --reverse --bind 'load:select-all' --delimiter '\t' --with-nth 2.. \
-        --header 'Tab: unselect/select · Enter: save the selected commands as one recipe' |
+      FZF_DEFAULT_OPTS="--color=16,bg+:-1,fg+:-1:reverse:bold,gutter:-1${FZF_DEFAULT_OPTS:+ $FZF_DEFAULT_OPTS}" \
+        fzf --multi --height 40% --reverse --bind 'load:select-all' --delimiter '\t' --with-nth 2.. \
+          --header 'Tab: unselect/select · Enter: save the selected commands as one recipe' |
       sort -n | cut -f2-)
   else
     PICKED=("$*")

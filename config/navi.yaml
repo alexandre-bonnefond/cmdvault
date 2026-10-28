@@ -11,7 +11,8 @@ style:
     width_percentage: 40
     min_width: 40
   snippet:
-    color: white
+    # the terminal's text colour, white disappears on a light background
+    color: reset
 
 finder:
   command: fzf
