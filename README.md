@@ -92,3 +92,7 @@ the replay window from rofi (default urxvt).
 
 `tests/run.sh` checks the writer, the parser, the tldr conversion and that navi reads what is written,
 against a temporary cheats repo (plus shellcheck when it is installed).
+
+## License
+
+MIT, see `LICENSE`.
